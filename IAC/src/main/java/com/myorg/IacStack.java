@@ -7,6 +7,12 @@ import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.services.*;
+import software.amazon.awscdk.services.dynamodb.AttributeType;
+import software.amazon.awscdk.services.dynamodb.GlobalSecondaryIndexProps;
+import software.amazon.awscdk.services.dynamodb.LocalSecondaryIndexProps;
+import software.amazon.awscdk.services.dynamodb.Table;
+import software.amazon.awscdk.services.dynamodb.TableProps;
+import software.amazon.awscdk.services.dynamodb.Attribute;
 import software.amazon.awscdk.services.stepfunctions.*;
 import software.amazon.awscdk.services.stepfunctions.StateMachine;
 import software.amazon.awscdk.services.lambda.Code;
@@ -26,6 +32,7 @@ public class IacStack extends Stack {
     public IacStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
         
+        // IAM Roles
         Role stepFunctionRole = Role.Builder.create(this, "StepFuncRole")
             .assumedBy(new ServicePrincipal("states.amazonaws.com"))
             .build();
@@ -44,7 +51,7 @@ public class IacStack extends Stack {
             .actions(Arrays.asList("*"))
             .build());
 
-
+        // Lambda Functions
         Function newsGetterFunction = Function.Builder.create(this, "NewsAPIGetter")
             .runtime(Runtime.NODEJS_14_X)
             .code(Code.fromAsset("resources"))
@@ -66,7 +73,7 @@ public class IacStack extends Stack {
             .timeout(Duration.seconds(30))
             .handler("SendEmails.handler").build();
 
-
+        // State Machine
         StateMachine stateMachine = StateMachine.Builder.create(this, "MyStateMachine")
             .definition(LambdaInvoke.Builder.create(this, "newsGetterFunction")
                 .lambdaFunction(newsGetterFunction)
@@ -79,6 +86,19 @@ public class IacStack extends Stack {
                 .build()))
             .role(stepFunctionRole)
             .build();
+
+        // Dynamo DB
+        String tableName = "SWEN514__User_Registration_Log";
+        TableProps tableProps = TableProps.builder()
+            .partitionKey(Attribute.builder()
+                .name("location")
+                .type(AttributeType.STRING)
+                .build())
+            .readCapacity(5)
+            .writeCapacity(5)
+            .tableName(tableName)
+            .build();
+
     }
 }
 
