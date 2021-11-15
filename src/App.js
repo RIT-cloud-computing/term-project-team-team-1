@@ -1,24 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import covid from './covid.png'
+import {Col, Row, Button} from 'reactstrap'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <div className="App">
+            <div className={"logo"}>
+            <img src={covid} className="App-logo" alt="logo"/>
+            </div>
+            <p className="formfield">
+                <label htmlFor="textarea">Enter Name: </label>
+                <textarea name="Name" cols={"50"} rows={"1"}>
+                </textarea>
+            </p>
+            <p className="formfield">
+                <label htmlFor="textarea">Enter Email: </label>
+                <textarea name="Email" cols={"50"} rows={"1"}>
+                </textarea>
+            </p>
+            <p className="formfield">
+                <label htmlFor="textarea">Enter Location: </label>
+                <textarea name="Location" cols={"50"} rows={"1"}>
+                </textarea>
+            </p>
+        <div className="Register">
+            <Button> Register </Button>
+        </div>
+        </div>
   );
 }
 
