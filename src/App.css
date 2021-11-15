@@ -12,9 +12,12 @@
 }
 
 .formfield * {
-  vertical-align: middle;
+  vertical-align: central;
+  horiz-align: center;
   font-size: calc(10px + 2vmin);
   font-style: oblique;
 }
+
+
 
 
