@@ -1,7 +1,6 @@
 import './App.css';
 import covid from './covid.png'
-import { Button } from 'reactstrap'
-import {useState, useCallback} from 'react';
+import { useState, useCallback } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -23,11 +22,14 @@ function App() {
         setEmail('');
         setCity('');
         setRegion('');
-        swal('Signed up for Cov-Alert System!', '', 'success');
-    })
+        swal('Signed up for Cov-Alert!', '', 'success');
+    });
   
     return (
         <div className="App">
+            <h2> Cov-Alert Sign Up </h2>
+            <h4> Sign up now for weekly updates on how Covid-19 is trending in your area </h4>
+
             <div className={"logo"}>
                 <img src={covid} className="App-logo" alt="logo"/>
             </div>
@@ -49,11 +51,9 @@ function App() {
                 </div>
             </div>
             
-            <Button onClick={buttonClicked} disabled={buttonDisabled}> Register </Button>
+            <button onClick={buttonClicked} disabled={buttonDisabled}> Sign Up </button>
         </div>
   );
 }
-
-
 
 export default App;
