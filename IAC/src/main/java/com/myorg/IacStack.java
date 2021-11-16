@@ -98,6 +98,7 @@ public class IacStack extends Stack {
             .writeCapacity(5)
             .tableName(tableName)
             .build();
+        Table userRegistrationLogTable = new Table(this, tableName, tableProps)
 
     }
 }
