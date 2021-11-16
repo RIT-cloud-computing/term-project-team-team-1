@@ -4,7 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
-const url = 'https://qsd6yc2he8.execute-api.us-east-1.amazonaws.com/test'; //not sure if this is working, also not sure how to make sure this url is right once using IAC
+const url = 'https://qsd6yc2he8.execute-api.us-east-1.amazonaws.com/test/users'; //not sure if this is working, also not sure how to make sure this url is right once using IAC
 
 function App() {
     const [email, setEmail] = useState('');
@@ -17,12 +17,19 @@ function App() {
         axios.post(url, {
             email,
             city,
-            region
+            region,
+        })
+        .then((response) => {
+            console.log(response)
+            swal('Signed up for Cov-Alert!', '', 'success');
+            setEmail('');
+            setCity('');
+            setRegion('');
+        })
+        .catch((error) => {
+            console.log(error);
+            swal('Error signing up for Cov-Alert', 'Sorry about that, please try again later', 'error');
         });
-        setEmail('');
-        setCity('');
-        setRegion('');
-        swal('Signed up for Cov-Alert!', '', 'success');
     };
   
     return (
