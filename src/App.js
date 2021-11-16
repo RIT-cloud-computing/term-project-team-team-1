@@ -1,6 +1,6 @@
 import './App.css';
 import covid from './covid.png'
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
@@ -11,9 +11,9 @@ function App() {
     const [city, setCity] = useState('');
     const [region, setRegion] = useState('');
 
-    const buttonDisabled = email == '' || city == '' || region == '';
+    const buttonDisabled = email === '' || city === '' || region === '';
 
-    const buttonClicked = useCallback(() => {
+    const onSignUp = () => {
         axios.post(url, {
             email,
             city,
@@ -23,7 +23,7 @@ function App() {
         setCity('');
         setRegion('');
         swal('Signed up for Cov-Alert!', '', 'success');
-    });
+    };
   
     return (
         <div className="App">
@@ -51,7 +51,7 @@ function App() {
                 </div>
             </div>
             
-            <button onClick={buttonClicked} disabled={buttonDisabled}> Sign Up </button>
+            <button onClick={onSignUp} disabled={buttonDisabled}> Sign Up </button>
         </div>
   );
 }
