@@ -1,33 +1,42 @@
 import './App.css';
 import covid from './covid.png'
-import { Button } from 'reactstrap'
-import {useState, useCallback} from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
-const url = 'https://qsd6yc2he8.execute-api.us-east-1.amazonaws.com/test'; //not sure if this is working, also not sure how to make sure this url is right once using IAC
+const url = 'https://qsd6yc2he8.execute-api.us-east-1.amazonaws.com/test/users'; //not sure if this is working, also not sure how to make sure this url is right once using IAC
 
 function App() {
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [region, setRegion] = useState('');
 
-    const buttonDisabled = email == '' || city == '' || region == '';
+    const buttonDisabled = email === '' || city === '' || region === '';
 
-    const buttonClicked = useCallback(() => {
+    const onSignUp = () => {
         axios.post(url, {
             email,
             city,
-            region
+            region,
+        })
+        .then((response) => {
+            console.log(response)
+            swal('Signed up for Cov-Alert!', '', 'success');
+            setEmail('');
+            setCity('');
+            setRegion('');
+        })
+        .catch((error) => {
+            console.log(error);
+            swal('Error signing up for Cov-Alert', 'Sorry about that, please try again later', 'error');
         });
-        setEmail('');
-        setCity('');
-        setRegion('');
-        swal('Signed up for Cov-Alert System!', '', 'success');
-    })
+    };
   
     return (
         <div className="App">
+            <h2> Cov-Alert Sign Up </h2>
+            <h4> Sign up now for weekly updates on how Covid-19 is trending in your area </h4>
+
             <div className={"logo"}>
                 <img src={covid} className="App-logo" alt="logo"/>
             </div>
@@ -49,11 +58,9 @@ function App() {
                 </div>
             </div>
             
-            <Button onClick={buttonClicked} disabled={buttonDisabled}> Register </Button>
+            <button onClick={onSignUp} disabled={buttonDisabled}> Sign Up </button>
         </div>
   );
 }
-
-
 
 export default App;

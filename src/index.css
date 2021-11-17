@@ -36,6 +36,15 @@ input[type="text"] {
   width: 100%;
 }
 
+h2 {
+  margin-bottom: 0;
+}
+
+h4 {
+  margin: 0;
+  width: 75%;
+}
+
 button {
   appearance: none;
   background-color: #FAFBFC;
