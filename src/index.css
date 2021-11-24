@@ -29,6 +29,7 @@ code {
 
 label {
   margin-right: 10px;
+  flex-shrink: 0;
 }
 
 input[type="text"] {

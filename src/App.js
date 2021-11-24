@@ -4,14 +4,13 @@ import { useState } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 
-const url = 'https://qsd6yc2he8.execute-api.us-east-1.amazonaws.com/test/users'; //not sure if this is working, also not sure how to make sure this url is right once using IAC
-
 function App() {
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [region, setRegion] = useState('');
+    const [url, setUrl] = useState('');
 
-    const buttonDisabled = email === '' || city === '' || region === '';
+    const buttonDisabled = email === '' || city === '' || region === '' || url === '';
 
     const onSignUp = () => {
         axios.post(url, {
@@ -25,6 +24,7 @@ function App() {
             setEmail('');
             setCity('');
             setRegion('');
+            setUrl('');
         })
         .catch((error) => {
             console.log(error);
@@ -55,6 +55,11 @@ function App() {
                 <div className="input-row">
                     <label> State/Country: </label>
                     <input type="text" value={region} onChange={(event) => setRegion(event.target.value)} />
+                </div>
+
+                <div className="input-row">
+                    <label> Endpoint URL: </label>
+                    <input type="text" value={url} onChange={(event) => setUrl(event.target.value)} />
                 </div>
             </div>
             
