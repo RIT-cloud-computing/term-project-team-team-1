@@ -22,7 +22,6 @@ function App() {
         setEmail('');
         setCity('');
         setRegion('');
-        setUrl('');
     };
   
     return (
