@@ -17,19 +17,12 @@ function App() {
             email,
             city,
             region,
-        })
-        .then((response) => {
-            console.log(response)
-            swal('Signed up for Cov-Alert!', '', 'success');
-            setEmail('');
-            setCity('');
-            setRegion('');
-            setUrl('');
-        })
-        .catch((error) => {
-            console.log(error);
-            swal('Error signing up for Cov-Alert', 'Sorry about that, please try again later', 'error');
         });
+        swal('Signed up for Cov-Alert!', '', 'success');
+        setEmail('');
+        setCity('');
+        setRegion('');
+        setUrl('');
     };
   
     return (
