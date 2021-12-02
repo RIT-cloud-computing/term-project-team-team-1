@@ -14,6 +14,7 @@ import software.amazon.awscdk.services.dynamodb.TableProps;
 import software.amazon.awscdk.services.dynamodb.Attribute;
 import software.amazon.awscdk.services.stepfunctions.*;
 import software.amazon.awscdk.services.stepfunctions.StateMachine;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.Runtime;
@@ -23,10 +24,12 @@ import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.iam.ServicePrincipal;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.s3.Bucket;
-//import software.amazon.awscdk.services.s3.deployment.*;
+import software.amazon.awscdk.services.s3.deployment.*;
 import software.amazon.awscdk.services.apigateway.*;
 import software.amazon.awscdk.core.CfnOutput;
 import software.amazon.awscdk.core.RemovalPolicy;
+import software.amazon.awscdk.services.events.*;
+import software.amazon.awscdk.services.events.targets.LambdaFunction;
 
 public class IacStack extends Stack {
     public IacStack(final Construct scope, final String id) {
@@ -127,11 +130,10 @@ public class IacStack extends Stack {
                 .autoDeleteObjects(true)
                 .removalPolicy(RemovalPolicy.DESTROY)
                 .build();
-//        BucketDeployment.Builder.create(this, "DeployWebsite") //can't get the import to work for this
-//                .sources(List.of(s3deploy.Source.asset("resources/reactAppBuild")))
-//                .destinationBucket(frontendBucket)
-//                .destinationKeyPrefix("web/static")
-//                .build();
+        BucketDeployment.Builder.create(this, "DeployWebsite")
+                .sources(Arrays.asList(Source.asset("resources/reactAppBuild")))
+                .destinationBucket(frontendBucket)
+                .build();
         String websiteURL = frontendBucket.getBucketDomainName() + "/index.html";
         CfnOutput.Builder.create(this, "WebsiteURL").value(websiteURL).build();
 
@@ -145,6 +147,11 @@ public class IacStack extends Stack {
                         .build())
                 .build();
         api.getRoot().addMethod("POST"); //POST on /
+
+        // Eventbridge rule for scheduled lambda execution
+        Rule oncePerWeekRule = Rule.Builder.create(this, "Schedule Rule")
+          .schedule(Schedule.cron(CronOptions.builder().minute("0").hour("12").weekDay("sunday").build()))
+          .build();
+        oncePerWeekRule.addTarget(LambdaFunction.Builder.create(triggerStepFunctionsFunction).build());
     }
 }
-
